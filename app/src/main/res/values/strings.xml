@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">PerfectMemory</string>
+    <string name="input_type">qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM</string>
+</resources>
