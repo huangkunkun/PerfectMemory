@@ -17,6 +17,7 @@
             android:textColor="#000"/>
 
         <DatePicker
+            android:id="@+id/dp_show"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:calendarTextColor="#000"
@@ -24,6 +25,7 @@
             android:datePickerMode="spinner" />
 
         <TimePicker
+            android:id="@+id/tp_show"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:numbersInnerTextColor="#000"

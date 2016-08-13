@@ -1,21 +1,30 @@
 package floatball;
 
+import android.content.SharedPreferences;
 import android.support.v7.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.huangkun.perfectmemory.R;
+import com.huangkun.perfectmemory.db.WordDB;
+import com.huangkun.perfectmemory.model.Word;
+import com.huangkun.perfectmemory.utils.FormatTime;
 import com.huangkun.perfectmemory.utils.MyApplication;
 
-import floatball.interfaces.IMenu;
+import java.util.Calendar;
 
+import floatball.interfaces.IMenu;
 
 
 public class FloatBallMenu implements IMenu {
@@ -24,12 +33,16 @@ public class FloatBallMenu implements IMenu {
     private int menuWidth, menuHeight;
     private FloatBall mFloatBall;
 
-    private Context mContext ;
+    private Context mContext;
     private MyClickListener listener = new MyClickListener();
 
-    public FloatBallMenu(Context context){
+    private int i = 0; //用来记录事件的顺序
+    private long time ; //记录当前时间的
+
+    public FloatBallMenu(Context context) {
         this.mContext = context;
     }
+
 
     @Override
     public void onAttach(FloatBall floatBall, Context context) {
@@ -166,28 +179,45 @@ public class FloatBallMenu implements IMenu {
         return IDFactory.getId();
     }
 
-    private class MyClickListener implements View.OnClickListener{
+    private class MyClickListener implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            if (v == tvLeftCenter || v == tvRightCenter){
+            if (v == tvLeftCenter || v == tvRightCenter) {
                 setWordDialog();
-            }else if (v == tvLeftGift || v == tvRightGift){
+            } else if (v == tvLeftGift || v == tvRightGift) {
                 setEventDialog();
             }
 
         }
     }
-    private void setWordDialog(){
+
+    private String inputWord = "";
+    private String inputMean = "";
+
+    //弹出记录单词的对话框
+    private void setWordDialog() {
+        getCurrentTime();
+        final String timeStr = FormatTime.formatTime(yearGet, monthGet, dayGet, hourGet, minuteGet);
         View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.dialog_word, null);
         EditText editMean = (EditText) view.findViewById(R.id.et_mean);
-        EditText editWord = (EditText)view.findViewById(R.id.et_word);
+        EditText editWord = (EditText) view.findViewById(R.id.et_word);
+        inputWord = editWord.getText().toString();
+        inputMean = editMean.getText().toString();
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
         dialog.setView(view);
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        if (TextUtils.isEmpty(inputWord) || TextUtils.isEmpty(inputMean)) {
+                            Toast.makeText(mContext, "单词或解释未输入", Toast.LENGTH_SHORT).show();
+                        }
+                        Word word = new Word();
+                        word.setWordName(inputWord);
+                        word.setWordMean(inputMean);
+                        word.setWordTime(timeStr);
+                        WordDB wordDB = WordDB.getInstance(mContext);
+                        wordDB.saveWord(word);
                     }
                 }
         );
@@ -195,20 +225,75 @@ public class FloatBallMenu implements IMenu {
         dialog.show();
         mFloatBall.hideMenu();
     }
-    private void setEventDialog(){
-        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.dialog_event, null);
+
+    private String inputEvent = "";
+    private int yearGet = 0;
+    private int monthGet = 0;
+    private int dayGet = 0;
+    private int hourGet = 0;
+    private int minuteGet = 0;
+
+    //弹出记录事件的对话框
+    private void setEventDialog() {
+        View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_event, null);
         EditText editEvent = (EditText) view.findViewById(R.id.et_event);
+        inputEvent = editEvent.getText().toString();
+        getCurrentTime(); //初始化为当前系统日期时间，如果用户没有选择，则默认为当前时间
+        DatePicker datePicker = (DatePicker) view.findViewById(R.id.dp_show);
+        datePicker.init(yearGet, monthGet, dayGet, new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
+                yearGet = year;
+                monthGet = monthOfYear;
+                dayGet = dayOfMonth;
+            }
+        });
+
+        TimePicker timePicker = (TimePicker) view.findViewById(R.id.tp_show);
+        timePicker.setOnTimeChangedListener(new TimePicker.OnTimeChangedListener() {
+            @Override
+            public void onTimeChanged(TimePicker view, int hourOfDay, int minute) {
+                hourGet = hourOfDay;
+                minuteGet = minute;
+            }
+        });
         AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
         dialog.setView(view);
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-
+                        saveEventData();
+                        Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
                     }
                 }
         );
         dialog.setCancelable(true);
         dialog.show();
         mFloatBall.hideMenu();
+    }
+
+    //获取当前时间
+    private void getCurrentTime() {
+        Calendar calendar = Calendar.getInstance();
+        yearGet = calendar.get(Calendar.YEAR);
+        monthGet = calendar.get(Calendar.MONTH);
+        dayGet = calendar.get(Calendar.DAY_OF_MONTH);
+        hourGet = calendar.get(Calendar.HOUR_OF_DAY);
+        minuteGet = calendar.get(Calendar.MINUTE);
+        time = calendar.getTimeInMillis();
+    }
+
+    //保存用户设定的数据到本地
+    private void saveEventData() {
+        i = i + 1;
+        SharedPreferences.Editor editor = mContext.getSharedPreferences("event" + i, Context.MODE_PRIVATE).edit();
+        editor.putInt("yearFinal", yearGet);
+        editor.putInt("monthFinal", monthGet);
+        editor.putInt("dayFinal", dayGet);
+        editor.putInt("hourFinal", hourGet);
+        editor.putInt("minuteFinal", minuteGet);
+        editor.putString("eventFinal", inputEvent);
+        editor.putInt("number", i);
+        editor.commit();
     }
 }
