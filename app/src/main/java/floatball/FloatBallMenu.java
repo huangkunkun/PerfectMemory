@@ -36,13 +36,11 @@ public class FloatBallMenu implements IMenu {
     private Context mContext;
     private MyClickListener listener = new MyClickListener();
 
-    private int i = 0; //用来记录事件的顺序
-    private long time ; //记录当前时间的
+    private long time; //记录当前时间的
 
     public FloatBallMenu(Context context) {
         this.mContext = context;
     }
-
 
     @Override
     public void onAttach(FloatBall floatBall, Context context) {
@@ -188,13 +186,11 @@ public class FloatBallMenu implements IMenu {
             } else if (v == tvLeftGift || v == tvRightGift) {
                 setEventDialog();
             }
-
         }
     }
 
     private String inputWord = "";
     private String inputMean = "";
-
     //弹出记录单词的对话框
     private void setWordDialog() {
         getCurrentTime();
@@ -212,18 +208,26 @@ public class FloatBallMenu implements IMenu {
                         if (TextUtils.isEmpty(inputWord) || TextUtils.isEmpty(inputMean)) {
                             Toast.makeText(mContext, "单词或解释未输入", Toast.LENGTH_SHORT).show();
                         }
-                        Word word = new Word();
-                        word.setWordName(inputWord);
-                        word.setWordMean(inputMean);
-                        word.setWordTime(timeStr);
-                        WordDB wordDB = WordDB.getInstance(mContext);
-                        wordDB.saveWord(word);
+                        saveWordToSQL(inputWord, inputMean, timeStr); //将内容保存到数据库
+                        saveNumberWord(); //保存单词的序号到本地
+                        Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
                     }
+
+
                 }
         );
         dialog.setCancelable(true);
         dialog.show();
         mFloatBall.hideMenu();
+    }
+
+    private void saveWordToSQL(String inputWord, String inputMean, String timeStr) {
+        Word word = new Word();
+        word.setWordName(inputWord);
+        word.setWordMean(inputMean);
+        word.setWordTime(timeStr);
+        WordDB wordDB = WordDB.getInstance(mContext);
+        wordDB.saveWord(word);
     }
 
     private String inputEvent = "";
@@ -262,6 +266,9 @@ public class FloatBallMenu implements IMenu {
         dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
+                        if (TextUtils.isEmpty(inputEvent)) {
+                            Toast.makeText(mContext, "事件内容未输入", Toast.LENGTH_SHORT).show();
+                        }
                         saveEventData();
                         Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
                     }
@@ -283,17 +290,58 @@ public class FloatBallMenu implements IMenu {
         time = calendar.getTimeInMillis();
     }
 
+    private int numberWord = 0; //用来记录单词的顺序
+
+    //保存单词序号
+    private void saveNumberWord() {
+        try{
+            getNumberWord();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        SharedPreferences.Editor editor = mContext.getSharedPreferences("numberWord", Context.MODE_PRIVATE).edit();
+        editor.putInt("numberWord", numberWord);
+        editor.commit();
+    }
+
+    //获取单词序号
+    private void getNumberWord() {
+        SharedPreferences sp = mContext.getSharedPreferences("numberWord", Context.MODE_PRIVATE);
+        numberEvent = sp.getInt("numberWord", 0);
+        numberWord++; //获取到上次的数据后，需要将序号加1，供保存时使用
+    }
+
+    private int numberEvent = 0; //用来记录事件的顺序
+    //保存事件序号
+    private void saveNumberEvent() {
+        SharedPreferences.Editor editor = mContext.getSharedPreferences("numberEvent", Context.MODE_PRIVATE).edit();
+        editor.putInt("numberEvent", numberEvent);
+        editor.commit();
+    }
+
+    //获取事件序号
+    private void getNumberEvent() {
+        SharedPreferences sp = mContext.getSharedPreferences("numberEvent", Context.MODE_PRIVATE);
+        numberEvent = sp.getInt("numberEvent", 0);
+        numberEvent++; //获取到上次的数据后，需要将序号加1，供保存时使用
+    }
+
     //保存用户设定的数据到本地
     private void saveEventData() {
-        i = i + 1;
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("event" + i, Context.MODE_PRIVATE).edit();
+        try {
+            getNumberEvent(); //获取用于本次保存所需的序号
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        SharedPreferences.Editor editor = mContext.getSharedPreferences("event" + numberEvent, Context.MODE_PRIVATE).edit();
         editor.putInt("yearFinal", yearGet);
         editor.putInt("monthFinal", monthGet);
         editor.putInt("dayFinal", dayGet);
         editor.putInt("hourFinal", hourGet);
         editor.putInt("minuteFinal", minuteGet);
         editor.putString("eventFinal", inputEvent);
-        editor.putInt("number", i);
         editor.commit();
+        saveNumberEvent();  //保存序号
     }
+
 }
