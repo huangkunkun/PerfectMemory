@@ -5,25 +5,24 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-public class WordOpenHelper extends SQLiteOpenHelper {
+public class MoneyOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Word表建表语句
      */
-    public static final String CREATE_WORD = "create table Word(" +
+    public static final String CREATE_MONEY = "create table Money(" +
             "id integer primary key autoincrement" +
-            "word_name text," +
-            "word_mean text" +
-            "word_time text)";
+            "money_amount integer," +
+            "money_mean text" +
+            "money_time text)";
 
-
-    public WordOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    public MoneyOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-        db.execSQL(CREATE_WORD);
+        db.execSQL(CREATE_MONEY);
     }
 
     @Override

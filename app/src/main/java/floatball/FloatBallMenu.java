@@ -17,9 +17,11 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.huangkun.perfectmemory.R;
-import com.huangkun.perfectmemory.db.WordDB;
-import com.huangkun.perfectmemory.model.Word;
+import com.huangkun.perfectmemory.db.MoneyDB;
+import com.huangkun.perfectmemory.model.Money;
+import com.huangkun.perfectmemory.receiver.AlarmReceiver;
 import com.huangkun.perfectmemory.utils.FormatTime;
+import com.huangkun.perfectmemory.utils.MyAlarm;
 import com.huangkun.perfectmemory.utils.MyApplication;
 
 import java.util.Calendar;
@@ -35,8 +37,6 @@ public class FloatBallMenu implements IMenu {
 
     private Context mContext;
     private MyClickListener listener = new MyClickListener();
-
-    private long time; //记录当前时间的
 
     public FloatBallMenu(Context context) {
         this.mContext = context;
@@ -63,7 +63,6 @@ public class FloatBallMenu implements IMenu {
     }
 
     private void addLeftMenu(RelativeLayout parent) {
-        final Context context = parent.getContext();
         RelativeLayout.LayoutParams childLayoutParams = new RelativeLayout.LayoutParams(DensityUtil.dip2px(parent.getContext(), 52), DensityUtil.dip2px(parent.getContext(), 30));
         childLayoutParams.setMargins(0, 0, DensityUtil.dip2px(parent.getContext(), 20), 0);
         childLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
@@ -87,7 +86,7 @@ public class FloatBallMenu implements IMenu {
         childLayoutParams.addRule(RelativeLayout.LEFT_OF, leftLine.getId());
         tvLeftCenter = new TextView(parent.getContext());
         tvLeftCenter.setId(getId());
-        tvLeftCenter.setText("单词");
+        tvLeftCenter.setText("消费");
         tvLeftCenter.setOnClickListener(listener);
         tvLeftCenter.setTextSize(14);
         tvLeftCenter.setGravity(Gravity.CENTER);
@@ -97,12 +96,11 @@ public class FloatBallMenu implements IMenu {
 
 
     private void addRightMenu(RelativeLayout parent) {
-        final Context context = parent.getContext();
         RelativeLayout.LayoutParams childLayoutParams = new RelativeLayout.LayoutParams(DensityUtil.dip2px(parent.getContext(), 52), DensityUtil.dip2px(parent.getContext(), 30));
         childLayoutParams.setMargins(DensityUtil.dip2px(parent.getContext(), 20), 0, 0, 0);
         tvRightCenter = new TextView(parent.getContext());
         tvRightCenter.setId(getId());
-        tvRightCenter.setText("单词");
+        tvRightCenter.setText("消费");
         tvRightCenter.setOnClickListener(listener);
         tvRightCenter.setTextSize(14);
         tvRightCenter.setGravity(Gravity.CENTER);
@@ -182,52 +180,58 @@ public class FloatBallMenu implements IMenu {
         @Override
         public void onClick(View v) {
             if (v == tvLeftCenter || v == tvRightCenter) {
-                setWordDialog();
+                setMoneyDialog();
             } else if (v == tvLeftGift || v == tvRightGift) {
                 setEventDialog();
             }
         }
     }
 
-    private String inputWord = "";
+    private String inputAmount = "";
     private String inputMean = "";
-    //弹出记录单词的对话框
-    private void setWordDialog() {
+    private EditText editMean;
+    private EditText editAmount;
+
+    //弹出记录消费的对话框
+    private void setMoneyDialog() {
         getCurrentTime();
         final String timeStr = FormatTime.formatTime(yearGet, monthGet, dayGet, hourGet, minuteGet);
-        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.dialog_word, null);
-        EditText editMean = (EditText) view.findViewById(R.id.et_mean);
-        EditText editWord = (EditText) view.findViewById(R.id.et_word);
-        inputWord = editWord.getText().toString();
-        inputMean = editMean.getText().toString();
-        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.dialog_money, null);
+        editMean = (EditText) view.findViewById(R.id.et_mean);
+        editAmount = (EditText) view.findViewById(R.id.et_word);
+        final AlertDialog dialog = new AlertDialog.Builder(mContext).setPositiveButton("确定", null)
+                .setNegativeButton("取消", null).create();
         dialog.setView(view);
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (TextUtils.isEmpty(inputWord) || TextUtils.isEmpty(inputMean)) {
-                            Toast.makeText(mContext, "单词或解释未输入", Toast.LENGTH_SHORT).show();
-                        }
-                        saveWordToSQL(inputWord, inputMean, timeStr); //将内容保存到数据库
-                        saveNumberWord(); //保存单词的序号到本地
-                        Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
-                    }
-
-
-                }
-        );
         dialog.setCancelable(true);
         dialog.show();
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputAmount = editAmount.getText().toString();
+                String firstOfInputAmount = String.valueOf(inputAmount.charAt(0));//把输入金额的第一位拿出来
+                inputMean = editMean.getText().toString();
+                if (TextUtils.isEmpty(inputAmount) || TextUtils.isEmpty(inputMean)) {
+                    Toast.makeText(mContext, "金额或用途未输入", Toast.LENGTH_SHORT).show();
+                } else if (firstOfInputAmount.equals(".") || (firstOfInputAmount.equals("0") && !inputAmount.contains("."))) {
+                    Toast.makeText(mContext, "金额输入不合法", Toast.LENGTH_SHORT).show();
+                } else {
+                    saveMoneyToSQL(Integer.parseInt(inputAmount), inputMean, timeStr); //将内容保存到数据库
+                    saveNumberMoney(); //保存消费的序号到本地
+                    Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            }
+        });
         mFloatBall.hideMenu();
     }
 
-    private void saveWordToSQL(String inputWord, String inputMean, String timeStr) {
-        Word word = new Word();
-        word.setWordName(inputWord);
-        word.setWordMean(inputMean);
-        word.setWordTime(timeStr);
-        WordDB wordDB = WordDB.getInstance(mContext);
-        wordDB.saveWord(word);
+    private void saveMoneyToSQL(int inputAmount, String inputMean, String timeStr) {
+        Money money = new Money();
+        money.setMoneyAmount(inputAmount);
+        money.setMoneyMean(inputMean);
+        money.setMoneyTime(timeStr);
+        MoneyDB moneyDB = MoneyDB.getInstance(mContext);
+        moneyDB.saveMoney(money);
     }
 
     private String inputEvent = "";
@@ -236,12 +240,12 @@ public class FloatBallMenu implements IMenu {
     private int dayGet = 0;
     private int hourGet = 0;
     private int minuteGet = 0;
+    private EditText editEvent;
 
     //弹出记录事件的对话框
     private void setEventDialog() {
         View view = LayoutInflater.from(mContext).inflate(R.layout.dialog_event, null);
-        EditText editEvent = (EditText) view.findViewById(R.id.et_event);
-        inputEvent = editEvent.getText().toString();
+        editEvent = (EditText) view.findViewById(R.id.et_event);
         getCurrentTime(); //初始化为当前系统日期时间，如果用户没有选择，则默认为当前时间
         DatePicker datePicker = (DatePicker) view.findViewById(R.id.dp_show);
         datePicker.init(yearGet, monthGet, dayGet, new DatePicker.OnDateChangedListener() {
@@ -261,22 +265,34 @@ public class FloatBallMenu implements IMenu {
                 minuteGet = minute;
             }
         });
-        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        final AlertDialog dialog = new AlertDialog.Builder(mContext).setPositiveButton("确定", null)
+                .setNegativeButton("取消", null).create();
         dialog.setView(view);
-        dialog.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (TextUtils.isEmpty(inputEvent)) {
-                            Toast.makeText(mContext, "事件内容未输入", Toast.LENGTH_SHORT).show();
-                        }
-                        saveEventData();
-                        Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
-                    }
-                }
-        );
-        dialog.setCancelable(true);
         dialog.show();
+        dialog.setCancelable(true);
+        dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                inputEvent = editEvent.getText().toString();
+                if (TextUtils.isEmpty(inputEvent)) {
+                    Toast.makeText(mContext, "事件内容未输入", Toast.LENGTH_SHORT).show();
+                    return;
+                } else {
+                    saveEventData(); //保存数据到本地
+                    setAlarm();  //设置定时提醒
+                    Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
+                    dialog.dismiss();
+                }
+            }
+        });
         mFloatBall.hideMenu();
+    }
+
+    //设置定时提醒
+    private void setAlarm() {
+        long time = FormatTime.getTime(yearGet, monthGet, dayGet, hourGet, minuteGet);
+        MyAlarm myAlarm = new MyAlarm();
+        myAlarm.setAlarm(mContext, AlarmReceiver.class, time, inputEvent);
     }
 
     //获取当前时间
@@ -287,31 +303,31 @@ public class FloatBallMenu implements IMenu {
         dayGet = calendar.get(Calendar.DAY_OF_MONTH);
         hourGet = calendar.get(Calendar.HOUR_OF_DAY);
         minuteGet = calendar.get(Calendar.MINUTE);
-        time = calendar.getTimeInMillis();
     }
 
-    private int numberWord = 0; //用来记录单词的顺序
+    private int numberMoney = 0; //用来记录单词的顺序
 
     //保存单词序号
-    private void saveNumberWord() {
-        try{
-            getNumberWord();
-        }catch (Exception e){
+    private void saveNumberMoney() {
+        try {
+            getNumberMoney();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        SharedPreferences.Editor editor = mContext.getSharedPreferences("numberWord", Context.MODE_PRIVATE).edit();
-        editor.putInt("numberWord", numberWord);
+        SharedPreferences.Editor editor = mContext.getSharedPreferences("numberMoney", Context.MODE_PRIVATE).edit();
+        editor.putInt("numberMoney", numberMoney);
         editor.commit();
     }
 
     //获取单词序号
-    private void getNumberWord() {
-        SharedPreferences sp = mContext.getSharedPreferences("numberWord", Context.MODE_PRIVATE);
-        numberEvent = sp.getInt("numberWord", 0);
-        numberWord++; //获取到上次的数据后，需要将序号加1，供保存时使用
+    private void getNumberMoney() {
+        SharedPreferences sp = mContext.getSharedPreferences("numberMoney", Context.MODE_PRIVATE);
+        numberMoney = sp.getInt("numberMoney", 0);
+        numberMoney++; //获取到上次的数据后，需要将序号加1，供保存时使用
     }
 
     private int numberEvent = 0; //用来记录事件的顺序
+
     //保存事件序号
     private void saveNumberEvent() {
         SharedPreferences.Editor editor = mContext.getSharedPreferences("numberEvent", Context.MODE_PRIVATE).edit();

@@ -1,10 +1,23 @@
 package com.huangkun.perfectmemory.utils;
 
+import java.util.Calendar;
+
 /**
- * Created by hi on 2016/8/13.
+ * 主要提供用于返回标准时间格式的方法
  */
 public class FormatTime {
-    public static String formatTime(int year, int month, int day, int hour, int minute){
+
+    /**
+     * 传入获取的年月日时分，给出类似 2016 - 1 - 1 00 : 00这种格式的数据
+     *
+     * @param year
+     * @param month
+     * @param day
+     * @param hour
+     * @param minute
+     * @return 2016 - 1 - 1 00 : 00这种格式的字符串
+     */
+    public static String formatTime(int year, int month, int day, int hour, int minute) {
 
         String yearStr = year + "";
         String monthStr = month + "";
@@ -14,5 +27,27 @@ public class FormatTime {
         String formatTime = yearStr + " - " + monthStr + " - " + dayStr + "  " + hourStr + " : " + minuteStr;
 
         return formatTime;
+    }
+
+    /**
+     * 给出获取的年月日时分，给出以毫秒为单位的时间，主要用作设置alarm时的参数
+     * @param year
+     * @param month
+     * @param day
+     * @param hour
+     * @param minute
+     * @return 以毫秒为单位的时间
+     */
+    public static long getTime(int year, int month, int day, int hour, int minute) {
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.YEAR, year);
+        calendar.set(Calendar.MONTH, month);
+        calendar.set(Calendar.DAY_OF_MONTH, day);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        long time = calendar.getTimeInMillis();
+
+        return time;
     }
 }
