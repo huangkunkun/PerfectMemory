@@ -11,9 +11,9 @@ public class MoneyOpenHelper extends SQLiteOpenHelper {
      * Word表建表语句
      */
     public static final String CREATE_MONEY = "create table Money(" +
-            "id integer primary key autoincrement" +
+            "id integer primary key autoincrement," +
             "money_amount integer," +
-            "money_mean text" +
+            "money_mean text," +
             "money_time text)";
 
     public MoneyOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
