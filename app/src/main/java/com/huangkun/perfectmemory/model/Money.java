@@ -1,20 +1,22 @@
 package com.huangkun.perfectmemory.model;
 
+import java.util.UUID;
+
 /**
  * Created by hi on 2016/8/10.
  */
 public class Money {
-    private int id;
+    private UUID id;
     private int moneyAmount;
     private String moneyMean;
     private String moneyTime;
 
-    public int getId() {
-        return id;
+    public void Money() {
+        id = UUID.randomUUID();
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public UUID getId() {
+        return id;
     }
 
     public int getMoneyAmount() {

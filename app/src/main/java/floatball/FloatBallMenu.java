@@ -208,22 +208,23 @@ public class FloatBallMenu implements IMenu {
             @Override
             public void onClick(View v) {
                 inputAmount = editAmount.getText().toString();
-                String firstOfInputAmount = String.valueOf(inputAmount.charAt(0));//把输入金额的第一位拿出来
-                inputMean = editMean.getText().toString();
-                if (TextUtils.isEmpty(inputAmount) || TextUtils.isEmpty(inputMean)) {
-                    Toast.makeText(mContext, "金额或用途未输入", Toast.LENGTH_SHORT).show();
-                } else if (firstOfInputAmount.equals(".") || (firstOfInputAmount.equals("0") && !inputAmount.contains("."))) {
-                    Toast.makeText(mContext, "金额输入不合法", Toast.LENGTH_SHORT).show();
-                } else {
-                    saveMoneyToSQL(Integer.parseInt(inputAmount), inputMean, timeStr); //将内容保存到数据库
-                    saveNumberMoney(); //保存消费的序号到本地
-                    Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
-                    dialog.dismiss();
+                    inputMean = editMean.getText().toString();
+                    if (TextUtils.isEmpty(inputAmount) || TextUtils.isEmpty(inputMean) ) {
+                        Toast.makeText(mContext, "金额或用途未输入", Toast.LENGTH_SHORT).show();
+                    } else if (String.valueOf(inputAmount.charAt(0)).equals(".") || (String.valueOf(inputAmount.charAt(0)).equals("0") && !inputAmount.contains("."))) {
+                        Toast.makeText(mContext, "金额输入不合法", Toast.LENGTH_SHORT).show();
+                    } else {
+                        saveMoneyToSQL(Integer.parseInt(inputAmount), inputMean, timeStr); //将内容保存到数据库
+                        saveNumberMoney(); //保存消费的序号到本地
+                        Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
+                        dialog.dismiss();
+                    }
                 }
             }
-        });
-        mFloatBall.hideMenu();
-    }
+
+            );
+            mFloatBall.hideMenu();
+        }
 
     private void saveMoneyToSQL(int inputAmount, String inputMean, String timeStr) {
         Money money = new Money();

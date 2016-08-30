@@ -10,6 +10,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +34,16 @@ public class MainActivity extends AppCompatActivity {
         initView();  //初始化底部的几个View,及初始化控件
         initPagerAdapter(); //初始化ViewPager的适配器及viewPager绑定适配器
         floatingBall();  //设置悬浮小球
+        setSlidingMenu();
+    }
+
+    private void setSlidingMenu() {
+        SlidingMenu slidingMenu = new SlidingMenu(this);
+        slidingMenu.setMode(SlidingMenu.LEFT);
+        slidingMenu.setBehindOffset(300);
+        slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
+        slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
+        slidingMenu.setMenu(R.layout.sliding_menu);
     }
 
     private void floatingBall() {

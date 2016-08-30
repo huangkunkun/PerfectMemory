@@ -55,7 +55,7 @@ public class MoneyDB {
         if (cursor.moveToFirst()){
             do {
                 Money money = new Money();
-                money.setId(cursor.getInt(cursor.getColumnIndex("id")));
+               // money.setId(cursor.getInt(cursor.getColumnIndex("id")));
                 money.setMoneyAmount(cursor.getInt(cursor.getColumnIndex("money_amount")));
                 money.setMoneyMean(cursor.getString(cursor.getColumnIndex("money_mean")));
                 money.setMoneyTime(cursor.getString(cursor.getColumnIndex("money_time")));
