@@ -22,6 +22,7 @@
         <activity android:name=".activity.BootStrapActivity"
            android:theme="@android:style/Theme.NoDisplay"></activity>
         <activity android:name=".activity.WarnActivity"/>
+        <activity android:name=".activity.AllMoneyActivity"/>
 
         <receiver android:name=".receiver.AlarmReceiver" />
         <receiver android:name=".receiver.BootStrapReceiver">

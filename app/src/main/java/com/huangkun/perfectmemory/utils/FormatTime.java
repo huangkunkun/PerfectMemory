@@ -24,7 +24,13 @@ public class FormatTime {
         String dayStr = day + "";
         String hourStr = hour + "";
         String minuteStr = minute + "";
-        String formatTime = yearStr + " - " + monthStr + " - " + dayStr + "  " + hourStr + " : " + minuteStr;
+        if (hour < 10){
+            hourStr =  0 + hourStr;
+        }
+        if (minute < 10){
+            minuteStr =  0 + minuteStr;
+        }
+        String formatTime = yearStr + " - " + monthStr + " - " + dayStr + "   " + hourStr + " : " + minuteStr;
 
         return formatTime;
     }

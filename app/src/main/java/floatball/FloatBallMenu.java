@@ -306,7 +306,7 @@ public class FloatBallMenu implements IMenu {
         minuteGet = calendar.get(Calendar.MINUTE);
     }
 
-    private int numberMoney = 0; //用来记录单词的顺序
+    private int numberMoney = 0; //用来记录消费的顺序
 
     //保存单词序号
     private void saveNumberMoney() {

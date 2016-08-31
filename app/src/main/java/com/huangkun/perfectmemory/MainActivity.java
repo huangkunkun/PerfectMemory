@@ -1,15 +1,19 @@
 package com.huangkun.perfectmemory;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioGroup;
 
+import com.huangkun.perfectmemory.activity.AllMoneyActivity;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
@@ -25,7 +29,8 @@ public class MainActivity extends AppCompatActivity {
     private String[] title = {"日常", "英语", "读物", "新闻"};
     private FloatBall mFloatBall;
 
-    public final  Context CONTEXT= MainActivity.this;
+    public final Context CONTEXT = MainActivity.this;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,6 +49,21 @@ public class MainActivity extends AppCompatActivity {
         slidingMenu.setTouchModeAbove(SlidingMenu.TOUCHMODE_MARGIN);
         slidingMenu.attachToActivity(this, SlidingMenu.SLIDING_CONTENT);
         slidingMenu.setMenu(R.layout.sliding_menu);
+
+        final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rg_sliding_menu);
+        radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_all_sliding_menu:
+                        Intent intent = new Intent(MainActivity.this, AllMoneyActivity.class);
+                        startActivity(intent);
+                        break;
+                    case R.id.rb_month_slidingmenu:
+                        break;
+                }
+            }
+        });
     }
 
     private void floatingBall() {
