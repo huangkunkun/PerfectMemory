@@ -6,14 +6,15 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
 import com.huangkun.perfectmemory.activity.AllMoneyActivity;
+import com.huangkun.perfectmemory.activity.HelpActivity;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
@@ -51,16 +52,23 @@ public class MainActivity extends AppCompatActivity {
         slidingMenu.setMenu(R.layout.sliding_menu);
 
         final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rg_sliding_menu);
+        final RadioButton allMoney = (RadioButton) findViewById(R.id.rb_all_sliding_menu);
+        final RadioButton help = (RadioButton) findViewById(R.id.rb_help_slidingmenu);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_all_sliding_menu:
-                        Intent intent = new Intent(MainActivity.this, AllMoneyActivity.class);
-                        startActivity(intent);
+                        Intent intent1 = new Intent(MainActivity.this, AllMoneyActivity.class);
+                        startActivity(intent1);
+                        allMoney.setChecked(false);
                         break;
-                    case R.id.rb_month_slidingmenu:
+                    case R.id.rb_help_slidingmenu:
+                        Intent intent2 = new Intent(MainActivity.this, HelpActivity.class);
+                        startActivity(intent2);
+                        help.setChecked(false);
                         break;
+
                 }
             }
         });
@@ -70,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
         FloatBallMenu menu = new FloatBallMenu(MainActivity.this);
         FloatBall.SingleIcon singleIcon = new FloatBall.SingleIcon(R.drawable.floatball, 1f, 0.3f);
         mFloatBall = new FloatBall.Builder(getApplicationContext()).menu(menu).icon(singleIcon).build();
-        mFloatBall.setLayoutGravity(Gravity.LEFT | Gravity.CENTER_VERTICAL);
+        mFloatBall.setLayoutGravity(Gravity.RIGHT | Gravity.CENTER_VERTICAL);
     }
 
 

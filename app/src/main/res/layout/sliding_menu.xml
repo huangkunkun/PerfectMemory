@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+    android:background="@drawable/background">
+<ImageView
+    android:id="@+id/iv_user"
+    android:layout_width="80dp"
+    android:layout_height="80dp"
+    android:src="@drawable/mouse"/>
+    <TextView
+        android:id="@+id/tv_user"
+        android:layout_toRightOf="@id/iv_user"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:text="我是用户"/>
+    <RadioGroup
+        android:id="@+id/rg_sliding_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/iv_user"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="50dp"
+        android:orientation="vertical">
+        <RadioButton
+            android:id="@+id/rb_all_sliding_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:text="总消费记录"
+            android:drawableLeft="@drawable/all_money"
+           />
+
+        <RadioButton
+            android:id="@+id/rb_memorial_sliding_menu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:text="备忘录"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/record"
+            />
+        <RadioButton
+            android:id="@+id/rb_help_slidingmenu"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:button="@null"
+            android:text="帮助"
+            android:layout_marginTop="10dp"
+            android:drawableLeft="@drawable/help"
+            />
+    </RadioGroup>
+    <Button
+        android:id="@+id/btn_exit_sliding_menu"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="100dp"
+        android:layout_marginRight="100dp"
+        android:text="退出"
+        android:background="@android:color/transparent"/>
+
+</RelativeLayout>
