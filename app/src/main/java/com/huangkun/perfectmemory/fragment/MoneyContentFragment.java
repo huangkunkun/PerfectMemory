@@ -9,7 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.huangkun.perfectmemory.R;
-import com.huangkun.perfectmemory.db.MoneyDB;
+import com.huangkun.perfectmemory.db.ModelDB;
 import com.huangkun.perfectmemory.model.Money;
 
 import java.util.List;
@@ -34,8 +34,8 @@ public class MoneyContentFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MoneyDB moneyDB = MoneyDB.getInstance(getActivity());
-        mMoneys = moneyDB.loadMoney();
+        ModelDB modelDB = ModelDB.getInstance(getActivity());
+        mMoneys = modelDB.loadMoney();
         //Intent intent = getActivity().getIntent();
         //int index = intent.getIntExtra("position", 0);
         position = getArguments().getInt("position", 0); //获取传递的position，即用户滑动到下一个页面对应的position

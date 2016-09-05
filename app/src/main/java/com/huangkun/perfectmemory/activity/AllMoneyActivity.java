@@ -4,17 +4,12 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
-import android.view.View;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.huangkun.perfectmemory.R;
-import com.huangkun.perfectmemory.db.MoneyDB;
+import com.huangkun.perfectmemory.db.ModelDB;
 import com.huangkun.perfectmemory.fragment.MoneyTitleFragment;
 import com.huangkun.perfectmemory.model.Money;
-
-import org.w3c.dom.Text;
 
 import java.util.List;
 
@@ -31,8 +26,8 @@ public class AllMoneyActivity extends FragmentActivity {
 
         TextView text = (TextView) findViewById(R.id.tv_money_text);
         TextView number = (TextView) findViewById(R.id.tv_money_number);
-        MoneyDB moneyDB = MoneyDB.getInstance(this);
-        mMoneys = moneyDB.loadMoney();
+        ModelDB modelDB = ModelDB.getInstance(this);
+        mMoneys = modelDB.loadMoney();
         if (mMoneys.size() != 0){
             int allNumber = 0;
             for (Money m : mMoneys){

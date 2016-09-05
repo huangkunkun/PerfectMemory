@@ -15,6 +15,7 @@ import android.widget.RadioGroup;
 
 import com.huangkun.perfectmemory.activity.AllMoneyActivity;
 import com.huangkun.perfectmemory.activity.HelpActivity;
+import com.huangkun.perfectmemory.activity.NoteActivity;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 import java.util.ArrayList;
@@ -54,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         final RadioGroup radioGroup = (RadioGroup) findViewById(R.id.rg_sliding_menu);
         final RadioButton allMoney = (RadioButton) findViewById(R.id.rb_all_sliding_menu);
         final RadioButton help = (RadioButton) findViewById(R.id.rb_help_slidingmenu);
+        final RadioButton note = (RadioButton) findViewById(R.id.rb_memorial_sliding_menu);
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -61,13 +63,22 @@ public class MainActivity extends AppCompatActivity {
                     case R.id.rb_all_sliding_menu:
                         Intent intent1 = new Intent(MainActivity.this, AllMoneyActivity.class);
                         startActivity(intent1);
+                        mFloatBall.hideFloatBall(); //查看记录时隐藏悬浮球
                         allMoney.setChecked(false);
+                        break;
+                    case R.id.rb_memorial_sliding_menu:
+                        Intent intent3 = new Intent(MainActivity.this, NoteActivity.class);
+                        startActivity(intent3);
+                        mFloatBall.hideFloatBall(); //隐藏悬浮球
+                        note.setChecked(false);
                         break;
                     case R.id.rb_help_slidingmenu:
                         Intent intent2 = new Intent(MainActivity.this, HelpActivity.class);
                         startActivity(intent2);
+                        mFloatBall.hideFloatBall(); //隐藏悬浮球
                         help.setChecked(false);
                         break;
+
 
                 }
             }

@@ -10,7 +10,7 @@ import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
 
 import com.huangkun.perfectmemory.R;
-import com.huangkun.perfectmemory.db.MoneyDB;
+import com.huangkun.perfectmemory.db.ModelDB;
 import com.huangkun.perfectmemory.fragment.MoneyContentFragment;
 import com.huangkun.perfectmemory.model.Money;
 
@@ -34,8 +34,8 @@ public class MoneyPagerActivity extends FragmentActivity {
         Intent intent = getIntent();
         position = intent.getIntExtra("position", 0); //用户点击的列表项的position
 
-        MoneyDB moneyDB = MoneyDB.getInstance(this);
-        mMoneys = moneyDB.loadMoney();
+        ModelDB modelDB = ModelDB.getInstance(this);
+        mMoneys = modelDB.loadMoney();
 
         FragmentManager manager = getSupportFragmentManager();
         mViewPager.setAdapter(new FragmentStatePagerAdapter(manager) {

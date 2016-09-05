@@ -2,8 +2,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.huangkun.perfectmemory">
 
-    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 
     <application
         android:name=".utils.MyApplication"
@@ -24,6 +22,8 @@
         <activity android:name=".activity.AllMoneyActivity"/>
         <activity android:name=".activity.MoneyPagerActivity"/>
         <activity android:name=".activity.HelpActivity"/>
+        <activity android:name=".activity.NoteActivity"/>
+        <activity android:name=".activity.NoteAddActivity"/>
 
         <receiver android:name=".receiver.AlarmReceiver" />
 

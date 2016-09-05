@@ -17,7 +17,7 @@ import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.huangkun.perfectmemory.R;
-import com.huangkun.perfectmemory.db.MoneyDB;
+import com.huangkun.perfectmemory.db.ModelDB;
 import com.huangkun.perfectmemory.model.Money;
 import com.huangkun.perfectmemory.receiver.AlarmReceiver;
 import com.huangkun.perfectmemory.utils.FormatTime;
@@ -68,7 +68,7 @@ public class FloatBallMenu implements IMenu {
         childLayoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
         tvLeftGift = new TextView(parent.getContext());
         tvLeftGift.setId(getId());
-        tvLeftGift.setText("事件");
+        tvLeftGift.setText("闹钟");
         tvLeftGift.setOnClickListener(listener);
         tvLeftGift.setTextSize(14);
         tvLeftGift.setGravity(Gravity.CENTER);
@@ -119,7 +119,7 @@ public class FloatBallMenu implements IMenu {
         childLayoutParams.addRule(RelativeLayout.RIGHT_OF, rightLine.getId());
         tvRightGift = new TextView(parent.getContext());
         tvRightGift.setId(getId());
-        tvRightGift.setText("事件");
+        tvRightGift.setText("闹钟");
         tvRightGift.setOnClickListener(listener);
         tvRightGift.setTextSize(14);
         tvRightGift.setGravity(Gravity.CENTER);
@@ -231,8 +231,8 @@ public class FloatBallMenu implements IMenu {
         money.setMoneyAmount(inputAmount);
         money.setMoneyMean(inputMean);
         money.setMoneyTime(timeStr);
-        MoneyDB moneyDB = MoneyDB.getInstance(mContext);
-        moneyDB.saveMoney(money);
+        ModelDB modelDB = ModelDB.getInstance(mContext);
+        modelDB.saveMoney(money);
     }
 
     private String inputEvent = "";
@@ -269,6 +269,7 @@ public class FloatBallMenu implements IMenu {
         final AlertDialog dialog = new AlertDialog.Builder(mContext).setPositiveButton("确定", null)
                 .setNegativeButton("取消", null).create();
         dialog.setView(view);
+        //dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
         dialog.setCancelable(true);
         dialog.getButton(DialogInterface.BUTTON_POSITIVE).setOnClickListener(new View.OnClickListener() {

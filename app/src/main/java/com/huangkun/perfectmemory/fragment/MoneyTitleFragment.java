@@ -13,7 +13,7 @@ import android.widget.TextView;
 
 import com.huangkun.perfectmemory.R;
 import com.huangkun.perfectmemory.activity.MoneyPagerActivity;
-import com.huangkun.perfectmemory.db.MoneyDB;
+import com.huangkun.perfectmemory.db.ModelDB;
 import com.huangkun.perfectmemory.model.Money;
 
 import java.util.List;
@@ -28,8 +28,8 @@ public class MoneyTitleFragment extends ListFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MoneyDB moneyDB = MoneyDB.getInstance(getActivity());
-        mMoneys = moneyDB.loadMoney();
+        ModelDB modelDB = ModelDB.getInstance(getActivity());
+        mMoneys = modelDB.loadMoney();
         MoneyAdapter adapter = new MoneyAdapter(getContext(), R.layout.money_title_item, mMoneys);
         setListAdapter(adapter);
 

@@ -1,5 +1,7 @@
 package com.huangkun.perfectmemory.activity;
 
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -17,7 +19,7 @@ import com.huangkun.perfectmemory.R;
  */
 public class WarnActivity extends AppCompatActivity {
 
-    private TextView contentShow;
+    private TextView contentShow; //提醒的内容
     private SeekBar seekBar;
 
     @Override
@@ -25,6 +27,12 @@ public class WarnActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.warn);
+
+        final NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+        Notification notification = new Notification();
+        notification.defaults = Notification.DEFAULT_ALL;
+        manager.notify(1, notification);
+
         Intent intent = getIntent();
         String content = intent.getStringExtra("content");
 
@@ -51,6 +59,7 @@ public class WarnActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (seekBar.getProgress() == 100) {
                     finish();
+                    manager.cancel(1);
                 }
             }
         });

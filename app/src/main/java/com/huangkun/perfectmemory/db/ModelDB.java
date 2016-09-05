@@ -6,6 +6,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import com.huangkun.perfectmemory.model.Money;
+import com.huangkun.perfectmemory.model.Note;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,29 +14,28 @@ import java.util.List;
 /**
  * 该类用于管理Word数据库，封装对于该数据库的操作
  */
-public class MoneyDB {
+public class ModelDB {
 
     public static final String DB_NAME = "perfect_memory";  //数据库名
 
     public static final int VERSION = 1; //数据库版本
 
-    private static MoneyDB sMoneyDB;
+    private static ModelDB sModelDB;
 
     private SQLiteDatabase db;
 
-    private MoneyDB(Context context){
-        MoneyOpenHelper dbHelper = new MoneyOpenHelper(context, DB_NAME, null, VERSION);
+    private ModelDB(Context context){
+        ModelOpenHelper dbHelper = new ModelOpenHelper(context, DB_NAME, null, VERSION);
         db = dbHelper.getWritableDatabase();
     }
 
     //用于获取WordDB的实例
-    public synchronized static MoneyDB getInstance(Context context){
-        if (sMoneyDB ==null){
-            sMoneyDB = new MoneyDB(context);
+    public synchronized static ModelDB getInstance(Context context){
+        if (sModelDB ==null){
+            sModelDB = new ModelDB(context);
         }
-        return sMoneyDB;
+        return sModelDB;
     }
-
 
     //将Word实例存储到数据库
     public void saveMoney(Money money){
@@ -60,6 +60,30 @@ public class MoneyDB {
                 money.setMoneyMean(cursor.getString(cursor.getColumnIndex("money_mean")));
                 money.setMoneyTime(cursor.getString(cursor.getColumnIndex("money_time")));
                 list.add(money);
+            }while (cursor.moveToNext());
+        }
+        return list;
+    }
+
+    public void saveNote(Note note){
+        if (note != null) {
+            ContentValues contentValues = new ContentValues();
+            contentValues.put("content", note.getContent());
+            contentValues.put("time", note.getTime());
+            db.insert("Note",null, contentValues);
+        }
+    }
+
+    public List<Note> loadNote(){
+        List<Note> list = new ArrayList<>();
+        Cursor cursor = db.query("Note", null, null, null, null, null,null);
+        if (cursor.moveToFirst()){
+            do {
+                Note note = new Note();
+                note.setId(cursor.getInt(cursor.getColumnIndex("id")));
+                note.setTime(cursor.getString(cursor.getColumnIndex("time")));
+                note.setContent(cursor.getString(cursor.getColumnIndex("content")));
+                list.add(note);
             }while (cursor.moveToNext());
         }
         return list;

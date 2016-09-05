@@ -1,6 +1,8 @@
 package com.huangkun.perfectmemory.utils;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * 主要提供用于返回标准时间格式的方法
@@ -24,11 +26,11 @@ public class FormatTime {
         String dayStr = day + "";
         String hourStr = hour + "";
         String minuteStr = minute + "";
-        if (hour < 10){
-            hourStr =  0 + hourStr;
+        if (hour < 10) {
+            hourStr = 0 + hourStr;
         }
-        if (minute < 10){
-            minuteStr =  0 + minuteStr;
+        if (minute < 10) {
+            minuteStr = 0 + minuteStr;
         }
         String formatTime = yearStr + " - " + monthStr + " - " + dayStr + "   " + hourStr + " : " + minuteStr;
 
@@ -37,6 +39,7 @@ public class FormatTime {
 
     /**
      * 给出获取的年月日时分，给出以毫秒为单位的时间，主要用作设置alarm时的参数
+     *
      * @param year
      * @param month
      * @param day
@@ -53,6 +56,15 @@ public class FormatTime {
         calendar.set(Calendar.HOUR_OF_DAY, hour);
         calendar.set(Calendar.MINUTE, minute);
         long time = calendar.getTimeInMillis();
+
+        return time;
+    }
+
+    //获取当前标准时间
+    public static String getCurrentTime() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d HH:mm");
+        Date date = new Date();
+        String time = dateFormat.format(date);
 
         return time;
     }

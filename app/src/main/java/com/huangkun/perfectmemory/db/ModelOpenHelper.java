@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 
-public class MoneyOpenHelper extends SQLiteOpenHelper {
+public class ModelOpenHelper extends SQLiteOpenHelper {
 
     /**
      * Word表建表语句
@@ -16,13 +16,22 @@ public class MoneyOpenHelper extends SQLiteOpenHelper {
             "money_mean text," +
             "money_time text)";
 
-    public MoneyOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+    /**
+     *note表建表语句
+     */
+    public static final String CREATE_NOTE = "create table Note(" +
+            "id integer primary key autoincrement," +
+            "content text," +
+            "time text)";
+
+    public ModelOpenHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_MONEY);
+        db.execSQL(CREATE_NOTE);
     }
 
     @Override
