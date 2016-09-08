@@ -19,10 +19,21 @@ public class HelpActivity extends Activity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.help_layout);
 
-        TextView textView = (TextView) findViewById(R.id.tv_help_show);
+        TextView explainTv = (TextView) findViewById(R.id.tv_explain_help_show);
+        setText("explain.txt", explainTv);
+        TextView moneyTv = (TextView) findViewById(R.id.tv_money_help_show);
+        setText("money.txt", moneyTv);
+        TextView alarmTv = (TextView) findViewById(R.id.tv_alarm_help_show);
+        setText("alarm.txt", alarmTv);
+        TextView sumMoneyTv = (TextView) findViewById(R.id.tv_sum_money_help_show);
+        setText("sum.txt", sumMoneyTv);
+        TextView noteTv = (TextView) findViewById(R.id.tv_note_help_show);
+        setText("note.txt", noteTv);
 
+    }
+    public void setText(String path, TextView textView){
         try {
-            InputStream is = getAssets().open("help.txt");
+            InputStream is = getAssets().open(path);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             String line = "";
             String content = "";

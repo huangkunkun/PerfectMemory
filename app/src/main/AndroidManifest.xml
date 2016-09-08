@@ -24,8 +24,9 @@
         <activity android:name=".activity.HelpActivity"/>
         <activity android:name=".activity.NoteActivity"/>
         <activity android:name=".activity.NoteAddActivity"/>
+        <activity android:name=".activity.NoteChangeActivity"/>
 
-        <receiver android:name=".receiver.AlarmReceiver" />
+        <receiver android:name=".receiver.AlarmReceiver"/>
 
     </application>
 

@@ -8,6 +8,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:gravity="left"
+    android:background="@null"
     android:text="100"
     android:padding="10dp"
     android:textStyle="bold"
@@ -19,13 +20,14 @@
         android:layout_weight="1"
         android:layout_marginTop="20dp"
         >
-    <TextView
+    <EditText
         android:id="@+id/money_content_mean"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="abcdefghijklmnopqrstuvwxyz"
         android:padding="10dp"
         android:gravity="center"
+        android:background="@null"
         android:layout_gravity="center_vertical"
         android:textSize="18sp"
         android:textColor="#00ff00"/>

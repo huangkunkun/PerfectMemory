@@ -1,12 +1,16 @@
 package com.huangkun.perfectmemory.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -32,17 +36,50 @@ public class NoteActivity extends Activity implements View.OnClickListener {
         setContentView(R.layout.note_layout);
         showData();
         Button addNote = (Button) findViewById(R.id.btn_note_add);
-        Button deleteNote = (Button) findViewById(R.id.btn_note_delete);
+        Button back = (Button) findViewById(R.id.btn_note_back);
         addNote.setOnClickListener(this);
-        deleteNote.setOnClickListener(this);
+        back.setOnClickListener(this);
     }
 
     private void showData() {
-        ModelDB modelDB = ModelDB.getInstance(this);
+        final ModelDB modelDB = ModelDB.getInstance(this);
         mNotes = modelDB.loadNote();
         if (mNotes.size() != 0) {
             listView = (ListView) findViewById(R.id.ll_note_show);
             listView.setAdapter(new NoteAdapter(mNotes));
+            listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    Intent intent = new Intent(NoteActivity.this, NoteChangeActivity.class);
+                    intent.putExtra("position", position);
+                    startActivity(intent);
+                }
+            });
+            listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    final Note note = mNotes.get(position);
+                    String title = note.getContent();
+                    //判断内容的长度，如果超过8位，就截取前8位并加上省略号作为标题，否则不做不处理
+                    if (title.length() >= 8){
+                        title = title.substring(0, 8) + "...";
+                    }
+                    AlertDialog.Builder builder = new AlertDialog.Builder(NoteActivity.this);
+                    builder.setTitle(title);
+                    builder.setMessage("确定要删除该记录吗？");
+                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            modelDB.deleteNote(note.getTime());
+                            showData(); //删除后要刷新当前界面显示的数据
+                        }
+                    });
+                    builder.setNegativeButton("取消", null);
+                    builder.show();
+
+                    return true;
+                }
+            });
         }
     }
 
@@ -53,7 +90,8 @@ public class NoteActivity extends Activity implements View.OnClickListener {
                 Intent intent1 = new Intent(NoteActivity.this, NoteAddActivity.class);
                 startActivity(intent1);
                 break;
-            case R.id.btn_note_delete:
+            case R.id.btn_note_back:
+                finish();
                 break;
             default:
                 break;
@@ -67,7 +105,7 @@ public class NoteActivity extends Activity implements View.OnClickListener {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            if (convertView == null){
+            if (convertView == null) {
                 convertView = LayoutInflater.from(getContext()).inflate(R.layout.note_item, null);
             }
             Note note = getItem(position);

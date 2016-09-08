@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class ModelOpenHelper extends SQLiteOpenHelper {
 
     /**
-     * Word表建表语句
+     * Money表建表语句
      */
     public static final String CREATE_MONEY = "create table Money(" +
             "id integer primary key autoincrement," +

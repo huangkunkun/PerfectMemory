@@ -10,6 +10,7 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -31,7 +32,6 @@ public class MainActivity extends AppCompatActivity {
     private String[] title = {"日常", "英语", "读物", "新闻"};
     private FloatBall mFloatBall;
 
-    public final Context CONTEXT = MainActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,13 @@ public class MainActivity extends AppCompatActivity {
         final RadioButton allMoney = (RadioButton) findViewById(R.id.rb_all_sliding_menu);
         final RadioButton help = (RadioButton) findViewById(R.id.rb_help_slidingmenu);
         final RadioButton note = (RadioButton) findViewById(R.id.rb_memorial_sliding_menu);
+        Button exit = (Button) findViewById(R.id.btn_exit_sliding_menu);
+        exit.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
         radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
@@ -78,8 +85,6 @@ public class MainActivity extends AppCompatActivity {
                         mFloatBall.hideFloatBall(); //隐藏悬浮球
                         help.setChecked(false);
                         break;
-
-
                 }
             }
         });

@@ -62,7 +62,7 @@ public class FormatTime {
 
     //获取当前标准时间
     public static String getCurrentTime() {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d HH:mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-M-d HH:mm:ss");
         Date date = new Date();
         String time = dateFormat.format(date);
 

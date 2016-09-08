@@ -1,32 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
               android:layout_width="match_parent"
-              android:layout_height="match_parent">
+              android:layout_height="match_parent"
+              android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_gravity="top"
+        android:background="#FFAB00"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/btn_note_back"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@drawable/back"
+            android:textSize="40sp"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:background="@android:color/transparent"
+            android:gravity="top"
+            android:text="备忘录"
+            android:textSize="30sp"
+            android:textStyle="italic"/>
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_weight="1"
+            android:background="@android:color/transparent"
+            android:textSize="20sp"
+            android:visibility="invisible"/>
+    </LinearLayout>
 
     <ListView
         android:id="@+id/ll_note_show"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="16dp"
         android:layout_weight="1"></ListView>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#E0E0E0">
+
         <Button
             android:id="@+id/btn_note_add"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="26sp"
-            android:text="+"
-            android:background="@null"/>
-        <Button
-            android:id="@+id/btn_note_delete"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="26sp"
-            android:layout_alignParentRight="true"
-            android:background="@null"
-            android:text="—"/>
-    </RelativeLayout>
+            android:background="#E0E0E0"
+            android:text="添加"
+            android:textSize="20sp"/>
+
+
 </LinearLayout>

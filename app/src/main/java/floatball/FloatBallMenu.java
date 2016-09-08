@@ -194,8 +194,8 @@ public class FloatBallMenu implements IMenu {
 
     //弹出记录消费的对话框
     private void setMoneyDialog() {
-        getCurrentTime();
-        final String timeStr = FormatTime.formatTime(yearGet, monthGet, dayGet, hourGet, minuteGet);
+        //getCurrentTime();
+        //final String timeStr = FormatTime.formatTime(yearGet, monthGet, dayGet, hourGet, minuteGet);
         View view = LayoutInflater.from(MyApplication.getContext()).inflate(R.layout.dialog_money, null);
         editMean = (EditText) view.findViewById(R.id.et_mean);
         editAmount = (EditText) view.findViewById(R.id.et_word);
@@ -214,8 +214,8 @@ public class FloatBallMenu implements IMenu {
                     } else if (String.valueOf(inputAmount.charAt(0)).equals(".") || (String.valueOf(inputAmount.charAt(0)).equals("0") && !inputAmount.contains("."))) {
                         Toast.makeText(mContext, "金额输入不合法", Toast.LENGTH_SHORT).show();
                     } else {
-                        saveMoneyToSQL(Integer.parseInt(inputAmount), inputMean, timeStr); //将内容保存到数据库
-                        saveNumberMoney(); //保存消费的序号到本地
+                        saveMoneyToSQL(Integer.parseInt(inputAmount), inputMean, FormatTime.getCurrentTime()); //将内容保存到数据库
+                        //saveNumberMoney(); //保存消费的序号到本地
                         Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
                     }

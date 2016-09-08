@@ -3,9 +3,12 @@ package com.huangkun.perfectmemory.fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.huangkun.perfectmemory.R;
@@ -21,6 +24,10 @@ public class MoneyContentFragment extends Fragment {
 
     private List<Money> mMoneys;
     private int position = 0;
+    private EditText mean;
+    private ModelDB modelDB;
+    private String meanLast;
+    private String timeLast;
 
     public static MoneyContentFragment newInstance(int position) {
         Bundle args = new Bundle();
@@ -34,7 +41,7 @@ public class MoneyContentFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ModelDB modelDB = ModelDB.getInstance(getActivity());
+         modelDB = ModelDB.getInstance(getActivity());
         mMoneys = modelDB.loadMoney();
         //Intent intent = getActivity().getIntent();
         //int index = intent.getIntExtra("position", 0);
@@ -47,14 +54,32 @@ public class MoneyContentFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.money_content_item, null);
         Money m = mMoneys.get(position);
+        meanLast = m.getMoneyMean();
+        timeLast = m.getMoneyTime();
         TextView amount = (TextView) v.findViewById(R.id.money_content_amount);
         amount.setText(m.getMoneyAmount() + "");
-        TextView mean = (TextView) v.findViewById(R.id.money_content_mean);
-        mean.setText(m.getMoneyMean());
+        mean = (EditText) v.findViewById(R.id.money_content_mean);
+        mean.setText(meanLast);
+        mean.setCursorVisible(false);
+        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        mean.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mean.setCursorVisible(true);
+            }
+        });
         TextView time = (TextView) v.findViewById(R.id.money_content_time);
-        time.setText(m.getMoneyTime());
+        time.setText(timeLast);
 
         return v;
     }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        String meanNew = mean.getText().toString();
+        if (!meanNew.equals(meanLast)){
+            modelDB.changeMoney(timeLast, meanNew);
+        }
+    }
 }

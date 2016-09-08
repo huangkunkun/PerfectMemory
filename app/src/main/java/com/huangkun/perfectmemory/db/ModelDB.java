@@ -48,7 +48,7 @@ public class ModelDB {
         }
     }
 
-    //从数据库中读取Word信息
+    //从数据库中读取Money信息
     public List<Money> loadMoney(){
         List<Money> list = new ArrayList<>();
         Cursor cursor = db.query("Money", null,null,null,null,null,null);
@@ -63,6 +63,18 @@ public class ModelDB {
             }while (cursor.moveToNext());
         }
         return list;
+    }
+
+    //根据传入的时间更新内容
+    public void changeMoney(String time, String mean){
+        ContentValues values = new ContentValues();
+        values.put("money_mean", mean);
+        db.update("Money",values, "money_time = ?", new String[]{time});
+    }
+
+    //根据传入的时间删除对应数据
+    public void deleteMoney(String time){
+        db.delete("Money", "money_time = ?", new String[]{time});
     }
 
     public void saveNote(Note note){
@@ -87,5 +99,8 @@ public class ModelDB {
             }while (cursor.moveToNext());
         }
         return list;
+    }
+    public void deleteNote(String time){
+        db.delete("Note", "time = ?", new String[]{time});
     }
 }

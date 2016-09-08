@@ -3,7 +3,6 @@ package com.huangkun.perfectmemory.activity;
 import android.app.Activity;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -40,8 +39,8 @@ public class NoteAddActivity extends Activity implements View.OnClickListener {
     }
 
     private void initView() {
-        timeAdd = (TextView) findViewById(R.id.tv_note_time);
-        contentAdd = (EditText) findViewById(R.id.et_note_content);
+        timeAdd = (TextView) findViewById(R.id.tv_note_add_time);
+        contentAdd = (EditText) findViewById(R.id.et_note_add_content);
         back = (Button) findViewById(R.id.btn_note_add_back);
         save = (Button) findViewById(R.id.btn_note_add_save);
     }
@@ -54,14 +53,12 @@ public class NoteAddActivity extends Activity implements View.OnClickListener {
                 break;
             case R.id.btn_note_add_save:
                 content = contentAdd.getText().toString();
-                if (TextUtils.isEmpty(content)){
-                }else{
+                if (!TextUtils.isEmpty(content)){
                     Note note = new Note();
                     note.setContent(content);
                     note.setTime(time);
                     ModelDB modelDB = ModelDB.getInstance(this);
                     modelDB.saveNote(note);
-                    content = null;
                 }
                 finish();
                 break;

@@ -20,9 +20,13 @@
         android:layout_height="wrap_content"
         android:text="用途"
         android:textColor="#000"/>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
     <EditText
         android:id="@+id/et_mean"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textColor="#00ff00"/>
+    </ScrollView>
 </LinearLayout>

@@ -63,4 +63,5 @@ public class MoneyTitleFragment extends ListFragment {
         intent.putExtra("position", position);
         startActivity(intent);
     }
+
 }
