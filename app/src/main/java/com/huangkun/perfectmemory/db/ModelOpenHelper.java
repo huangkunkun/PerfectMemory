@@ -12,7 +12,7 @@ public class ModelOpenHelper extends SQLiteOpenHelper {
      */
     public static final String CREATE_MONEY = "create table Money(" +
             "id integer primary key autoincrement," +
-            "money_amount integer," +
+            "money_amount double," +
             "money_mean text," +
             "money_time text)";
 

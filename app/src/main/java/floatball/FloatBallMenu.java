@@ -214,7 +214,7 @@ public class FloatBallMenu implements IMenu {
                     } else if (String.valueOf(inputAmount.charAt(0)).equals(".") || (String.valueOf(inputAmount.charAt(0)).equals("0") && !inputAmount.contains("."))) {
                         Toast.makeText(mContext, "金额输入不合法", Toast.LENGTH_SHORT).show();
                     } else {
-                        saveMoneyToSQL(Integer.parseInt(inputAmount), inputMean, FormatTime.getCurrentTime()); //将内容保存到数据库
+                        saveMoneyToSQL(Double.parseDouble(inputAmount), inputMean, FormatTime.getCurrentTime()); //将内容保存到数据库
                         //saveNumberMoney(); //保存消费的序号到本地
                         Toast.makeText(mContext, "保存成功", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
@@ -226,7 +226,7 @@ public class FloatBallMenu implements IMenu {
             mFloatBall.hideMenu();
         }
 
-    private void saveMoneyToSQL(int inputAmount, String inputMean, String timeStr) {
+    private void saveMoneyToSQL(double inputAmount, String inputMean, String timeStr) {
         Money money = new Money();
         money.setMoneyAmount(inputAmount);
         money.setMoneyMean(inputMean);

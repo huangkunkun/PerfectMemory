@@ -29,7 +29,7 @@ public class AllMoneyActivity extends FragmentActivity {
         ModelDB modelDB = ModelDB.getInstance(this);
         mMoneys = modelDB.loadMoney();
         if (mMoneys.size() != 0){
-            int allNumber = 0;
+            double allNumber = 0;
             for (Money m : mMoneys){
                 allNumber = allNumber + m.getMoneyAmount();
             }

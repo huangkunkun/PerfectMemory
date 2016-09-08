@@ -6,7 +6,7 @@ package com.huangkun.perfectmemory.model;
  */
 public class Money {
    // private UUID id;
-    private int moneyAmount;
+    private double moneyAmount;
     private String moneyMean;
     private String moneyTime;
 
@@ -18,11 +18,11 @@ public class Money {
 //        return id;
 //    }
 
-    public int getMoneyAmount() {
+    public double getMoneyAmount() {
         return moneyAmount;
     }
 
-    public void setMoneyAmount(int moneyAmount) {
+    public void setMoneyAmount(double moneyAmount) {
         this.moneyAmount = moneyAmount;
     }
 

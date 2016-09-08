@@ -56,7 +56,7 @@ public class ModelDB {
             do {
                 Money money = new Money();
                // money.setId(cursor.getInt(cursor.getColumnIndex("id")));
-                money.setMoneyAmount(cursor.getInt(cursor.getColumnIndex("money_amount")));
+                money.setMoneyAmount(cursor.getDouble(cursor.getColumnIndex("money_amount")));
                 money.setMoneyMean(cursor.getString(cursor.getColumnIndex("money_mean")));
                 money.setMoneyTime(cursor.getString(cursor.getColumnIndex("money_time")));
                 list.add(money);
