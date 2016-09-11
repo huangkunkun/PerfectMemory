@@ -9,8 +9,16 @@ public class Money {
     private double moneyAmount;
     private String moneyMean;
     private String moneyTime;
+    private boolean isChecked;
 
-//    public Money() {
+    public boolean isChecked() {
+        return isChecked;
+    }
+
+    public void setChecked(boolean checked) {
+        isChecked = checked;
+    }
+    //    public Money() {
 //        id = UUID.randomUUID();
 //    }
 //

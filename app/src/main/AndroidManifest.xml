@@ -22,9 +22,13 @@
         <activity android:name=".activity.AllMoneyActivity"/>
         <activity android:name=".activity.MoneyPagerActivity"/>
         <activity android:name=".activity.HelpActivity"/>
-        <activity android:name=".activity.NoteActivity"/>
+        <activity android:name=".activity.NoteActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".activity.NoteAddActivity"/>
         <activity android:name=".activity.NoteChangeActivity"/>
+        <activity android:name=".activity.MoneyDeleteActivity"
+            android:launchMode="singleTask"/>
+        <activity android:name=".activity.ChooseItemDetailActivity"/>
 
         <receiver android:name=".receiver.AlarmReceiver"/>
 

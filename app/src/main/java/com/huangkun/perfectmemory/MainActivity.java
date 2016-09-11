@@ -2,6 +2,7 @@ package com.huangkun.perfectmemory;
 
 import android.content.Intent;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -28,24 +29,41 @@ import floatball.FloatBallMenu;
 
 public class MainActivity extends AppCompatActivity {
 
-    private ViewPager viewPager;
-    private List<View> viewList;
-    private String[] title = {"科技", "英语", "读物", "新闻"};
     private FloatBall mFloatBall;
-
+    private RadioGroup mRadioGroup;
+    private Fragment fragment;
+    private FragmentManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        initView();
+        fragment = new TechnologyFragment();
+        setFragment();
         floatingBall();  //设置悬浮小球
         setSlidingMenu();
+    }
 
-        Fragment fragment = new TechnologyFragment();
-        getSupportFragmentManager().beginTransaction()
+    private void setFragment() {
+        manager = getSupportFragmentManager();
+        manager.beginTransaction()
                 .add(R.id.fragment_container, fragment)
                 .commit();
+    }
+
+    private void initView() {
+        mRadioGroup = (RadioGroup) findViewById(R.id.rg_main_activity);
+        mRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                switch (checkedId) {
+                    case R.id.rb_calendar:
+                        fragment = new TechnologyFragment();
+                        break;
+                }
+            }
+        });
     }
 
     private void setSlidingMenu() {

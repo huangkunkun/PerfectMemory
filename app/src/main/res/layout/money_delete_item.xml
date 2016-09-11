@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="horizontal"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+    <TextView
+        android:id="@+id/tv_money_delete_amount"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:text="400"
+        android:gravity="center"
+        android:textSize="20sp"
+        android:textStyle="bold"/>
+
+    <TextView
+        android:id="@+id/tv_money_delete_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginLeft="30dp"
+        android:layout_toRightOf="@id/tv_money_delete_amount"
+        android:text="2015年1月5日"
+        android:textSize="16dp"/>
+    <CheckBox
+        android:id="@+id/cb_money_delete"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:layout_alignParentRight="true"
+        />
+</RelativeLayout>

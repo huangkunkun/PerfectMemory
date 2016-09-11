@@ -18,6 +18,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.huangkun.perfectmemory.R;
+import com.huangkun.perfectmemory.activity.ChooseItemDetailActivity;
 import com.huangkun.perfectmemory.model.Technology;
 import com.huangkun.perfectmemory.utils.MyHttpUtil;
 
@@ -106,9 +107,8 @@ public class TechnologyFragment extends Fragment {
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    Intent intent = new Intent(Intent.ACTION_VIEW);
-                    Uri uri = Uri.parse(mTechnologies.get(position).getUrl());
-                    intent.setData(uri);
+                    Intent intent = new Intent(getActivity(), ChooseItemDetailActivity.class);
+                    intent.putExtra("url",mTechnologies.get(position).getUrl());
                     startActivity(intent);
                 }
             });
@@ -147,8 +147,6 @@ public class TechnologyFragment extends Fragment {
             return convertView;
           }
         }
-
-
         class ViewHolder {
             ImageView imageView;
             TextView timeTv;

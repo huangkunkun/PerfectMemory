@@ -5,20 +5,67 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <FrameLayout
-        android:id="@+id/fragment_container"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        >
-    </FrameLayout>
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="5dp"
+            android:layout_height="match_parent"
+            android:background="@android:color/darker_gray"/>
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            >
+        </FrameLayout>
+    </LinearLayout>
+
     <RadioGroup
+        android:id="@+id/rg_main_activity"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:padding="10dp">
+
         <RadioButton
-            android:layout_width="wrap_content"
+            android:id="@+id/rb_calendar"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:button="@null"/>
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="日历"/>
+
+        <RadioButton
+            android:id="@+id/rb_weather"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="天气"/>
+
+        <RadioButton
+            android:id="@+id/rb_joke"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="段子"/>
+
+        <RadioButton
+            android:id="@+id/rb_stars"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:button="@null"
+            android:gravity="center"
+            android:text="星座"/>
     </RadioGroup>
 </LinearLayout>
