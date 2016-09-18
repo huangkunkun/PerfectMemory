@@ -309,7 +309,7 @@ public class FloatBallMenu implements IMenu {
 
     private int numberMoney = 0; //用来记录消费的顺序
 
-    //保存单词序号
+    //保存消费序号
     private void saveNumberMoney() {
         try {
             getNumberMoney();

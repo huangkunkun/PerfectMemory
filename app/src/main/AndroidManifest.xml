@@ -3,6 +3,7 @@
           package="com.huangkun.perfectmemory">
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
     <application
         android:name=".utils.MyApplication"
         android:allowBackup="true"

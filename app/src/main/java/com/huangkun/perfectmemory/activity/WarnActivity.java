@@ -30,7 +30,13 @@ public class WarnActivity extends AppCompatActivity {
 
         final NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Notification notification = new Notification();
-        notification.defaults = Notification.DEFAULT_ALL;
+        long[] vibrates = {0, 1000, 1000, 1000};
+        notification.vibrate = vibrates;
+        notification.ledARGB = Color.GREEN;
+        notification.ledOnMS = 1000;
+        notification.ledOffMS = 1000;
+        notification.flags = Notification.FLAG_SHOW_LIGHTS;
+        notification.defaults = Notification.DEFAULT_SOUND;
         manager.notify(1, notification);
 
         Intent intent = getIntent();

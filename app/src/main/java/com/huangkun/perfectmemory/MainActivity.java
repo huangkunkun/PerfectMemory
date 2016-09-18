@@ -3,10 +3,12 @@ package com.huangkun.perfectmemory;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +20,7 @@ import android.widget.RadioGroup;
 import com.huangkun.perfectmemory.activity.AllMoneyActivity;
 import com.huangkun.perfectmemory.activity.HelpActivity;
 import com.huangkun.perfectmemory.activity.NoteActivity;
+import com.huangkun.perfectmemory.fragment.JokeFragment;
 import com.huangkun.perfectmemory.fragment.TechnologyFragment;
 import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
@@ -31,25 +34,37 @@ public class MainActivity extends AppCompatActivity {
 
     private FloatBall mFloatBall;
     private RadioGroup mRadioGroup;
-    private Fragment fragment;
-    private FragmentManager manager;
+    private ArrayList<Fragment> fragments; //用一个集合保存所有的fragment实例
+    private int curPosition = 0; //保存当前显示的fragment在fragments中的序号
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initFragment();   //1473756914
         initView();
-        fragment = new TechnologyFragment();
-        setFragment();
         floatingBall();  //设置悬浮小球
         setSlidingMenu();
+        Log.d("time", System.currentTimeMillis() / 1000 + "");
     }
 
-    private void setFragment() {
-        manager = getSupportFragmentManager();
-        manager.beginTransaction()
-                .add(R.id.fragment_container, fragment)
+    private void initFragment() {
+        fragments = new ArrayList<>();
+        fragments.add(new TechnologyFragment());
+        fragments.add(new JokeFragment());
+        getSupportFragmentManager().beginTransaction()
+                .add(R.id.fragment_container, fragments.get(curPosition))
                 .commit();
+    }
+
+    /**
+     * 根据传入的序号，获取对应的fragment实例，并同时更新当前显示
+     */
+    private void showFragment(int position) {
+        getSupportFragmentManager().beginTransaction()
+                .replace(R.id.fragment_container, fragments.get(position))
+                .commit();
+        curPosition = position;
     }
 
     private void initView() {
@@ -59,7 +74,10 @@ public class MainActivity extends AppCompatActivity {
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 switch (checkedId) {
                     case R.id.rb_calendar:
-                        fragment = new TechnologyFragment();
+                        showFragment(0);
+                        break;
+                    case R.id.rb_joke:
+                        showFragment(1);
                         break;
                 }
             }

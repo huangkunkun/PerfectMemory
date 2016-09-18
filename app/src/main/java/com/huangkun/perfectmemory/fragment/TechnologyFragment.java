@@ -104,6 +104,7 @@ public class TechnologyFragment extends Fragment {
             super.handleMessage(msg);
             LLAdapter adapter = new LLAdapter(getActivity(), R.layout.techonlogy, mTechnologies);
             mListView.setAdapter(adapter);
+            mListView.setEmptyView(getActivity().findViewById(R.id.iv_technology_empty_ll));
             mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
