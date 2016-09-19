@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.huangkun.perfectmemory.MainActivity;
 import com.huangkun.perfectmemory.R;
 import com.huangkun.perfectmemory.db.ModelDB;
 import com.huangkun.perfectmemory.model.Money;

@@ -2,10 +2,12 @@ package com.huangkun.perfectmemory.activity;
 
 import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.Service;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Window;
@@ -21,7 +23,7 @@ public class WarnActivity extends AppCompatActivity {
 
     private TextView contentShow; //提醒的内容
     private SeekBar seekBar;
-
+private Vibrator mVibrator;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -31,7 +33,8 @@ public class WarnActivity extends AppCompatActivity {
         final NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         Notification notification = new Notification();
         long[] vibrates = {0, 1000, 1000, 1000};
-        notification.vibrate = vibrates;
+        mVibrator = (Vibrator) getApplicationContext().getSystemService(Service.VIBRATOR_SERVICE);
+        mVibrator.vibrate(vibrates, 0);
         notification.ledARGB = Color.GREEN;
         notification.ledOnMS = 1000;
         notification.ledOffMS = 1000;
@@ -65,6 +68,7 @@ public class WarnActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar seekBar) {
                 if (seekBar.getProgress() == 100) {
                     finish();
+                    mVibrator.cancel();
                     manager.cancel(1);
                 }
             }

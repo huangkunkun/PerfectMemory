@@ -6,6 +6,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -46,7 +48,8 @@ public class NoteActivity extends Activity implements View.OnClickListener {
         mNotes = modelDB.loadNote();
         if (mNotes.size() != 0) {
             listView = (ListView) findViewById(R.id.ll_note_show);
-            listView.setAdapter(new NoteAdapter(mNotes));
+            final NoteAdapter adapter = new NoteAdapter(mNotes);
+            listView.setAdapter(adapter);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -71,7 +74,7 @@ public class NoteActivity extends Activity implements View.OnClickListener {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             modelDB.deleteNote(note.getTime());
-                            showData(); //删除后要刷新当前界面显示的数据
+                            recreate(); //删除后要刷新当前界面显示的数据
                         }
                     });
                     builder.setNegativeButton("取消", null);
